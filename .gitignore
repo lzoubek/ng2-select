@@ -33,4 +33,4 @@ npm-debug.log
 
 factories
 
-/**/*.metadata.json
+#/**/*.metadata.json
