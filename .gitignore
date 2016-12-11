@@ -33,4 +33,4 @@ ng2-select.d.ts
 
 factories
 
-/**/*.metadata.json
+#/**/*.metadata.json
