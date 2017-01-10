@@ -219,6 +219,11 @@ var SelectComponent = (function () {
         if (this._disabled === true) {
             return;
         }
+        if (this.inputMode === true) {
+            this.inputMode = false;
+            this.optionsOpened = false;
+            return;
+        }
         this.inputMode = !this.inputMode;
         if (this.inputMode === true && ((this.multiple === true && e) || this.multiple === false)) {
             this.focusToInput();
