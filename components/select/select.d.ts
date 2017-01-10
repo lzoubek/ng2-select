@@ -9,6 +9,7 @@ export declare class SelectComponent implements OnInit {
     idField: string;
     textField: string;
     multiple: boolean;
+    isSearch: boolean;
     items: Array<any>;
     disabled: boolean;
     active: Array<any>;
@@ -16,12 +17,14 @@ export declare class SelectComponent implements OnInit {
     selected: EventEmitter<any>;
     removed: EventEmitter<any>;
     typed: EventEmitter<any>;
+    opened: EventEmitter<any>;
     options: Array<SelectItem>;
     itemObjects: Array<SelectItem>;
     activeOption: SelectItem;
     element: ElementRef;
-    private inputMode;
     private optionsOpened;
+    private inputMode;
+    private _optionsOpened;
     private behavior;
     private inputValue;
     private _items;

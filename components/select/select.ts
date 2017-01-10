@@ -361,11 +361,6 @@ export class SelectComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustHtml(html);
   }
 
-  public removeClick(value: SelectItem, event: any): void {
-    event.stopPropagation();
-    this.remove(value);
-  }
-
   public inputEvent(e:any, isUpMode:boolean = false):void {
     // tab
     if (e.keyCode === 9) {
