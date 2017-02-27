@@ -357,8 +357,10 @@ export class SelectComponent implements OnInit {
     this.clickedOutside = this.clickedOutside.bind(this);
   }
 
-  public sanitize(html:string):SafeHtml {
-    return this.sanitizer.bypassSecurityTrustHtml(html);
+  public sanitize(html:string):any {
+    // disable sanitizing as it breaks
+    // selection event handlers in firefox
+    return html;
   }
 
   public inputEvent(e:any, isUpMode:boolean = false):void {
