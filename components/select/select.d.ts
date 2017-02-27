@@ -1,5 +1,5 @@
 import { EventEmitter, ElementRef, OnInit } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { SelectItem } from './select-item';
 import { OptionsBehavior } from './select-interfaces';
 export declare class SelectComponent implements OnInit {
@@ -31,7 +31,7 @@ export declare class SelectComponent implements OnInit {
     private _disabled;
     private _active;
     constructor(element: ElementRef, sanitizer: DomSanitizer);
-    sanitize(html: string): SafeHtml;
+    sanitize(html: string): any;
     inputEvent(e: any, isUpMode?: boolean): void;
     ngOnInit(): any;
     remove(item: SelectItem): void;

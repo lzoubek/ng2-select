@@ -101,7 +101,9 @@ var SelectComponent = (function () {
         configurable: true
     });
     SelectComponent.prototype.sanitize = function (html) {
-        return this.sanitizer.bypassSecurityTrustHtml(html);
+        // disable sanitizing as it breaks
+        // selection event handlers in firefox
+        return html;
     };
     SelectComponent.prototype.inputEvent = function (e, isUpMode) {
         if (isUpMode === void 0) { isUpMode = false; }
