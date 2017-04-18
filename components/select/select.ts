@@ -77,6 +77,11 @@ let styles = `
       color: #333;
       white-space: nowrap;
   }
+
+.ui-select-choices-row.selected {
+    background-color: grey;
+  }
+
   .ui-select-choices-row.active>a {
       color: #fff;
       text-decoration: none;
@@ -158,6 +163,7 @@ let styles = `
           <li *ngFor="let o of options" role="menuitem">
             <div class="ui-select-choices-row"
                  [class.active]="isActive(o)"
+                 [class.selected]="o.id == active[0]?.id"
                  (mouseenter)="selectActive(o)"
                  (click)="selectMatch(o, $event)">
               <a href="javascript:void(0)" class="dropdown-item">
