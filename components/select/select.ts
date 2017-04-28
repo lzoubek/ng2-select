@@ -129,6 +129,7 @@ let styles = `
   <div tabindex="0"
      *ngIf="multiple === false"
      (keyup)="mainClick($event)"
+     (click)="scrollToSelected()"
      [offClick]="clickedOutside"
      class="ui-select-container dropdown open">
     <div [ngClass]="{'ui-disabled': disabled}"></div>
@@ -531,6 +532,13 @@ export class SelectComponent implements OnInit {
 
   protected  selectActive(value:SelectItem):void {
     this.activeOption = value;
+  }
+
+  private scrollToSelected():void {
+    let selectedElement = this.element.nativeElement.querySelector('div.ui-select-choices-row.selected');
+    if(selectedElement === null)
+      return;
+    this.element.nativeElement.querySelector('ul.ui-select-choices').scrollTop = selectedElement.offsetTop - 40;
   }
 
   protected  isActive(value:SelectItem):boolean {
