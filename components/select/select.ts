@@ -77,6 +77,11 @@ let styles = `
       color: #333;
       white-space: nowrap;
   }
+
+.ui-select-choices-row.selected {
+    background-color: grey;
+  }
+
   .ui-select-choices-row.active>a {
       color: #fff;
       text-decoration: none;
@@ -124,6 +129,7 @@ let styles = `
   <div tabindex="0"
      *ngIf="multiple === false"
      (keyup)="mainClick($event)"
+     (click)="scrollToSelected()"
      [offClick]="clickedOutside"
      class="ui-select-container dropdown open">
     <div [ngClass]="{'ui-disabled': disabled}"></div>
@@ -158,6 +164,7 @@ let styles = `
           <li *ngFor="let o of options" role="menuitem">
             <div class="ui-select-choices-row"
                  [class.active]="isActive(o)"
+                 [class.selected]="o.id == active[0]?.id"
                  (mouseenter)="selectActive(o)"
                  (click)="selectMatch(o, $event)">
               <a href="javascript:void(0)" class="dropdown-item">
@@ -525,6 +532,13 @@ export class SelectComponent implements OnInit {
 
   protected  selectActive(value:SelectItem):void {
     this.activeOption = value;
+  }
+
+  private scrollToSelected():void {
+    let selectedElement = this.element.nativeElement.querySelector('div.ui-select-choices-row.selected');
+    if(selectedElement === null)
+      return;
+    this.element.nativeElement.querySelector('ul.ui-select-choices').scrollTop = selectedElement.offsetTop - 40;
   }
 
   protected  isActive(value:SelectItem):boolean {
