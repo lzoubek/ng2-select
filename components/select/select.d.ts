@@ -41,6 +41,7 @@ export declare class SelectComponent implements OnInit {
     protected matchClick(e: any): void;
     protected mainClick(event: any): void;
     protected selectActive(value: SelectItem): void;
+    private scrollToSelected();
     protected isActive(value: SelectItem): boolean;
     protected removeClick(value: SelectItem, event: any): void;
     private focusToInput(value?);
