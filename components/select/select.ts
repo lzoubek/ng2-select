@@ -443,8 +443,10 @@ export class SelectComponent implements OnInit {
     if (target && target.value) {
       this.inputValue = target.value;
       // consider spaces as logical OR
-      const filterValue = escapeRegexp(this.inputValue).trim().replace(/ /g,'|');
-      this.behavior.filter(new RegExp(filterValue, 'ig'));
+
+      let filterValue = escapeRegexp(this.inputValue).trim();
+      const parts: string[] = filterValue.split(' ').map((p: string) => p ? `(${p}).*` : '');
+      this.behavior.filter(new RegExp(parts.join(''), 'ig'));
       this.doEvent('typed', this.inputValue);
     }
   }
