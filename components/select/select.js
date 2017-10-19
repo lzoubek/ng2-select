@@ -11,8 +11,9 @@ var select_pipes_1 = require('./select-pipes');
 var common_1 = require('./common');
 var styles = "\n  .ui-select-toggle {\n    position: relative;\n  }\n\n  /* Fix caret going into new line in Firefox */\n  .ui-select-placeholder {\n    float: left;\n  }\n\n  /* Fix Bootstrap dropdown position when inside a input-group */\n  .input-group > .dropdown {\n    /* Instead of relative */\n    position: static;\n  }\n\n  .ui-select-match > .btn {\n    /* Instead of center because of .btn */\n    text-align: left !important;\n  }\n\n  .ui-select-match > .caret {\n    position: absolute;\n    top: 45%;\n    right: 15px;\n  }\n\n  .ui-disabled {\n    background-color: #eceeef;\n    border-radius: 4px;\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    z-index: 5;\n    opacity: 0.6;\n    top: 0;\n    left: 0;\n    cursor: not-allowed;\n  }\n\n  .ui-select-choices-container {\n    width: 100%;\n  }\n\n  .ui-select-choices-container > .ui-select-search {\n    padding: 3px;\n    padding-top: 0px;\n    margin-top: -2px;\n  }\n\n  .ui-select-choices {\n    width: 100%;\n    height: auto;\n    max-height: 200px;\n    overflow-x: hidden;\n    margin-top: 0;\n    list-style: none;\n    padding-left: 0;\n  }\n\n  .ui-select-multiple .ui-select-choices {\n    margin-top: 1px;\n  }\n  .ui-select-choices-row>a {\n      display: block;\n      padding: 3px 20px;\n      clear: both;\n      font-weight: 400;\n      line-height: 1.42857143;\n      color: #333;\n      white-space: nowrap;\n  }\n\n.ui-select-choices-row.selected {\n    background-color: grey;\n  }\n\n  .ui-select-choices-row.active>a {\n      color: #fff;\n      text-decoration: none;\n      outline: 0;\n      background-color: #428bca;\n  }\n\n  .ui-select-multiple {\n    height: auto;\n    padding:3px 3px 0 3px;\n  }\n\n  .ui-select-multiple .ui-select-search > input {\n    background-color: transparent !important; /* To prevent double background when disabled */\n    border: none;\n    outline: none;\n    box-shadow: none;\n    height: 1.6666em;\n    padding: 0;\n    margin-bottom: 3px;\n\n  }\n  .ui-select-match .close {\n      font-size: 1.6em;\n      line-height: 0.75;\n  }\n\n  .ui-select-multiple .ui-select-match-item {\n    outline: 0;\n    margin: 0 3px 3px 0;\n  }\n  .ui-select-toggle > .dropdown-caret {\n      position: absolute;\n      top: 50%;\n      right: 7px;\n      margin-top: -5px;\n      font-size: 80%;\n  }\n";
 var SelectComponent = (function () {
-    function SelectComponent(element, sanitizer) {
+    function SelectComponent(element, sanitizer, changeDetector) {
         this.sanitizer = sanitizer;
+        this.changeDetector = changeDetector;
         this.allowClear = false;
         this.placeholder = '';
         this.idField = 'id';
@@ -177,7 +178,9 @@ var SelectComponent = (function () {
         var target = e.target || e.srcElement;
         if (target && target.value) {
             this.inputValue = target.value;
-            this.behavior.filter(new RegExp(common_1.escapeRegexp(this.inputValue), 'ig'));
+            // consider spaces as logical OR
+            var filterValue = common_1.escapeRegexp(this.inputValue).trim().replace(/ /g, '|');
+            this.behavior.filter(new RegExp(filterValue, 'ig'));
             this.doEvent('typed', this.inputValue);
         }
     };
@@ -209,6 +212,7 @@ var SelectComponent = (function () {
     SelectComponent.prototype.clickedOutside = function () {
         this.inputMode = false;
         this.optionsOpened = false;
+        this.changeDetector.detectChanges();
     };
     Object.defineProperty(SelectComponent.prototype, "firstItemHasChildren", {
         get: function () {
@@ -343,6 +347,7 @@ var SelectComponent = (function () {
     SelectComponent.ctorParameters = [
         { type: core_1.ElementRef, },
         { type: platform_browser_1.DomSanitizer, },
+        { type: core_1.ChangeDetectorRef, },
     ];
     SelectComponent.propDecorators = {
         'allowClear': [{ type: core_1.Input },],

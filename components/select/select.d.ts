@@ -1,9 +1,10 @@
-import { EventEmitter, ElementRef, OnInit } from '@angular/core';
+import { EventEmitter, ElementRef, OnInit, ChangeDetectorRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { SelectItem } from './select-item';
 import { OptionsBehavior } from './select-interfaces';
 export declare class SelectComponent implements OnInit {
     private sanitizer;
+    private changeDetector;
     allowClear: boolean;
     placeholder: string;
     idField: string;
@@ -30,7 +31,7 @@ export declare class SelectComponent implements OnInit {
     private _items;
     private _disabled;
     private _active;
-    constructor(element: ElementRef, sanitizer: DomSanitizer);
+    constructor(element: ElementRef, sanitizer: DomSanitizer, changeDetector: ChangeDetectorRef);
     sanitize(html: string): any;
     inputEvent(e: any, isUpMode?: boolean): void;
     ngOnInit(): any;
