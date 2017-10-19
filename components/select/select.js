@@ -179,8 +179,9 @@ var SelectComponent = (function () {
         if (target && target.value) {
             this.inputValue = target.value;
             // consider spaces as logical OR
-            var filterValue = common_1.escapeRegexp(this.inputValue).trim().replace(/ /g, '|');
-            this.behavior.filter(new RegExp(filterValue, 'ig'));
+            var filterValue = common_1.escapeRegexp(this.inputValue).trim();
+            var parts = filterValue.split(' ').map(function (p) { return p ? "(" + p + ").*" : ''; });
+            this.behavior.filter(new RegExp(parts.join(''), 'ig'));
             this.doEvent('typed', this.inputValue);
         }
     };
