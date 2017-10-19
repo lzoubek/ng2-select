@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ElementRef, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, OnInit, ChangeDetectorRef } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { SelectItem } from './select-item';
 import { stripTags } from './select-pipes';
@@ -359,7 +359,7 @@ export class SelectComponent implements OnInit {
   private _disabled:boolean = false;
   private _active:Array<SelectItem> = [];
 
-  public constructor(element:ElementRef, private sanitizer:DomSanitizer) {
+  public constructor(element:ElementRef, private sanitizer:DomSanitizer, private changeDetector: ChangeDetectorRef) {
     this.element = element;
     this.clickedOutside = this.clickedOutside.bind(this);
   }
@@ -477,6 +477,7 @@ export class SelectComponent implements OnInit {
   public clickedOutside():void {
     this.inputMode = false;
     this.optionsOpened = false;
+    this.changeDetector.detectChanges();
   }
 
   public get firstItemHasChildren():boolean {
