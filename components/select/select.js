@@ -109,6 +109,7 @@ var SelectComponent = (function () {
     SelectComponent.prototype.inputEvent = function (e, isUpMode) {
         if (isUpMode === void 0) { isUpMode = false; }
         // tab
+        this.changeDetector.markForCheck();
         if (e.keyCode === 9) {
             return;
         }

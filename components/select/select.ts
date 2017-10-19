@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ElementRef, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { SelectItem } from './select-item';
 import { stripTags } from './select-pipes';
@@ -272,7 +272,8 @@ let styles = `
         </li>
       </ul>
   </div>
-  `
+  `,
+  //changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SelectComponent implements OnInit {
   @Input() public allowClear:boolean = false;
@@ -629,7 +630,7 @@ export class Behavior {
   }
 
   public ensureHighlightVisible(optionsMap:Map<string, number> = void 0):void {
-    let container = this.actor.element.nativeElement.querySelector('.ui-select-choices-content');
+    let container = this.actor.element.nativeElement.querySelector('.ui-select-choices');
     if (!container) {
       return;
     }
@@ -645,12 +646,20 @@ export class Behavior {
     if (!highlighted) {
       return;
     }
+
     let posY:number = highlighted.offsetTop + highlighted.clientHeight - container.scrollTop;
     let height:number = container.offsetHeight;
+
+    let searchInputHeight = 0;
+
+    const searchInput = this.actor.element.nativeElement.querySelector('.ui-select-search');
+    if (searchInput) {
+      searchInputHeight = searchInput.clientHeight;
+    }
     if (posY > height) {
-      container.scrollTop += posY - height;
+      container.scrollTop += posY - height - searchInputHeight;
     } else if (posY < highlighted.clientHeight) {
-      container.scrollTop -= highlighted.clientHeight - posY;
+      container.scrollTop -= highlighted.clientHeight - posY + searchInputHeight;
     }
   }
 
