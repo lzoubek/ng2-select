@@ -1,8 +1,8 @@
-import { EventEmitter, ElementRef, OnInit, ChangeDetectorRef } from '@angular/core';
+import { EventEmitter, ElementRef, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { SelectItem } from './select-item';
 import { OptionsBehavior } from './select-interfaces';
-export declare class SelectComponent implements OnInit {
+export declare class SelectComponent implements OnInit, OnDestroy {
     private sanitizer;
     private changeDetector;
     allowClear: boolean;
@@ -35,11 +35,12 @@ export declare class SelectComponent implements OnInit {
     sanitize(html: string): any;
     inputEvent(e: any, isUpMode?: boolean): void;
     ngOnInit(): any;
+    ngOnDestroy(): void;
     remove(item: SelectItem): void;
     doEvent(type: string, value: any): void;
-    clickedOutside(): void;
+    clickedOutside($event: MouseEvent): void;
     readonly firstItemHasChildren: boolean;
-    protected matchClick(e: any): void;
+    protected matchClick(e: MouseEvent): void;
     protected mainClick(event: any): void;
     protected selectActive(value: SelectItem): void;
     private scrollToSelected();
