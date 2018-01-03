@@ -9,6 +9,17 @@
               (typed)="typed($event)"
               placeholder="No city selected">
   </ng-select>
+    <div style="margin-left: 300px; width: 200px;">
+          <ng-select [allowClear]="true"
+              [items]="items"
+              [disabled]="disabled"
+              (data)="refreshValue($event)"
+              (selected)="selected($event)"
+              (removed)="removed($event)"
+              (typed)="typed($event)"
+              placeholder="No city selected">
+              </ng-select>
+    </div>
   <p></p>
   <pre>{{value.text}}</pre>
   <div>

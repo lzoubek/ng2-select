@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ElementRef, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, OnInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { SelectItem } from './select-item';
 import { stripTags } from './select-pipes';
@@ -130,7 +130,6 @@ let styles = `
      *ngIf="multiple === false"
      (keyup)="mainClick($event)"
      (click)="scrollToSelected()"
-     [offClick]="clickedOutside"
      class="ui-select-container dropdown open">
     <div [ngClass]="{'ui-disabled': disabled}"></div>
     <div class="ui-select-match">
@@ -209,7 +208,6 @@ let styles = `
      *ngIf="multiple === true"
      (keyup)="mainClick($event)"
      (focus)="focusToInput('')"
-     [offClick]="clickedOutside"
      class="ui-select-container ui-select-multiple dropdown form-control open">
     <div [ngClass]="{'ui-disabled': disabled}"></div>
     <span class="ui-select-match">
@@ -275,7 +273,7 @@ let styles = `
   `,
   //changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SelectComponent implements OnInit {
+export class SelectComponent implements OnInit, OnDestroy {
   @Input() public allowClear:boolean = false;
   @Input() public placeholder:string = '';
   @Input() public idField:string = 'id';
@@ -454,6 +452,11 @@ export class SelectComponent implements OnInit {
   public ngOnInit():any {
     this.behavior = (this.firstItemHasChildren) ?
       new ChildrenBehavior(this) : new GenericBehavior(this);
+    setTimeout(() => {document.addEventListener('click', this.clickedOutside);});
+  }
+
+  ngOnDestroy() {
+    document.removeEventListener('click', this.clickedOutside);
   }
 
   public remove(item:SelectItem):void {
@@ -479,17 +482,27 @@ export class SelectComponent implements OnInit {
     }
   }
 
-  public clickedOutside():void {
-    this.inputMode = false;
-    this.optionsOpened = false;
-    this.changeDetector.detectChanges();
+  public clickedOutside($event: MouseEvent):void {
+    if (this.optionsOpened) {
+      let element: HTMLElement = <HTMLElement>$event.target;
+      let isThisEl = false;
+      while (element.parentElement && !isThisEl) {
+        isThisEl = this.element.nativeElement === element;
+        element = element.parentElement;
+      }
+      if (!isThisEl) {
+        this.inputMode = false;
+        this.optionsOpened = false;
+        this.changeDetector.detectChanges();
+      }
+    }
   }
 
   public get firstItemHasChildren():boolean {
     return this.itemObjects[0] && this.itemObjects[0].hasChildren();
   }
 
-  protected matchClick(e:any):void {
+  protected matchClick(e:MouseEvent):void {
     if (this._disabled === true) {
       return;
     }
